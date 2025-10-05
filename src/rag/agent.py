@@ -30,10 +30,12 @@ class AgentState(TypedDict):
     current_question: str # current question being asked
     reasoning_steps: Annotated[List[str], "List of reasoning steps taken"] #agents thinking process
     tools_used: Annotated[List[str], "List of tools used in this session"] #tools used to answer the question
+    selected_tools: Annotated[List[str], "List of tools selected for execution"] #tools selected for this question
     final_answer: Optional[str] # #final answer
     sources: Annotated[List[str], "List of sources consulted"] #sources consulted
     session_id: str # session id
     tool_result: Optional[str] # result from tool execution
+    multi_tool_results: Annotated[Dict[str, str], "Results from multiple tools"] #results from multi-tool execution
 
 
 class FIAAgent:
@@ -124,7 +126,7 @@ class FIAAgent:
         return workflow.compile()
     
     def _classify_intent(self, question: str) -> str:
-        """Classify the user's intent using LLM."""
+        """Classify the user's intent using LLM with multi-tool support."""
         try:
             classification_prompt = f"""Classify this FIA regulation question into one of these categories:
 
@@ -133,11 +135,12 @@ class FIAAgent:
 3. SEARCH - Finding specific regulations (e.g., "find Article 5", "search for engine rules", "what are the requirements")
 4. SUMMARY - Comprehensive analysis (e.g., "summarize safety requirements", "comprehensive analysis")
 5. GENERAL - General regulation questions (e.g., "what are the rules", "explain regulations")
-6. OUT_OF_SCOPE - Not about FIA regulations (e.g., "weather", "cooking", "other topics")
+6. MULTI_TOOL - Questions requiring multiple tools (e.g., "safety requirements AND penalties", "compare AND summarize", "find regulations AND penalties")
+7. OUT_OF_SCOPE - Not about FIA regulations (e.g., "weather", "cooking", "other topics")
 
 Question: {question}
 
-Return only the category name (COMPARISON, PENALTY, SEARCH, SUMMARY, GENERAL, or OUT_OF_SCOPE)."""
+Return only the category name (COMPARISON, PENALTY, SEARCH, SUMMARY, GENERAL, MULTI_TOOL, or OUT_OF_SCOPE)."""
 
             messages = [
                 SystemMessage(content=classification_prompt),
@@ -148,7 +151,7 @@ Return only the category name (COMPARISON, PENALTY, SEARCH, SUMMARY, GENERAL, or
             intent = response.content.strip().upper()
             
             # Validate intent
-            valid_intents = ["COMPARISON", "PENALTY", "SEARCH", "SUMMARY", "GENERAL", "OUT_OF_SCOPE"]
+            valid_intents = ["COMPARISON", "PENALTY", "SEARCH", "SUMMARY", "GENERAL", "MULTI_TOOL", "OUT_OF_SCOPE"]
             if intent not in valid_intents:
                 intent = "GENERAL"  # Default fallback
             
@@ -170,8 +173,57 @@ Return only the category name (COMPARISON, PENALTY, SEARCH, SUMMARY, GENERAL, or
         }
         return tool_mapping.get(intent, "general_rag")
     
+    def _select_multi_tools(self, question: str) -> List[str]:
+        """Select multiple tools for complex questions requiring orchestration."""
+        try:
+            multi_tool_prompt = f"""Analyze this FIA regulation question and determine which tools are needed:
+
+Available tools:
+- regulation_search: Find specific regulations
+- regulation_comparison: Compare regulations between years
+- penalty_lookup: Look up penalties for violations
+- regulation_summary: Create comprehensive summaries
+- general_rag: General regulation questions
+
+Question: {question}
+
+Determine which tools are needed to fully answer this question. Consider:
+1. Does it ask for specific regulations? → regulation_search
+2. Does it ask for comparisons? → regulation_comparison
+3. Does it ask for penalties? → penalty_lookup
+4. Does it ask for summaries? → regulation_summary
+5. Is it a general question? → general_rag
+
+Return a JSON list of tool names, e.g., ["regulation_search", "penalty_lookup"]"""
+
+            messages = [
+                SystemMessage(content=multi_tool_prompt),
+                HumanMessage(content=question)
+            ]
+            
+            response = self.llm.invoke(messages)
+            tools_text = response.content.strip()
+            
+            # Parse JSON response
+            import json
+            try:
+                tools = json.loads(tools_text)
+                if isinstance(tools, list):
+                    return tools
+                else:
+                    return [tools]
+            except json.JSONDecodeError:
+                # Fallback: extract tool names from text
+                import re
+                tool_names = re.findall(r'"(regulation_\w+|penalty_\w+|general_\w+)"', tools_text)
+                return tool_names if tool_names else ["general_rag"]
+                
+        except Exception as e:
+            logger.error(f"Error in multi-tool selection: {str(e)}")
+            return ["general_rag"]  # Default fallback
+    
     def _reason_node(self, state: AgentState) -> AgentState:
-        """Enhanced reasoning node with intent classification."""
+        """Enhanced reasoning node with multi-tool support."""
         try:
             current_question = state["current_question"]
             reasoning_steps = state.get("reasoning_steps", [])
@@ -180,16 +232,23 @@ Return only the category name (COMPARISON, PENALTY, SEARCH, SUMMARY, GENERAL, or
             intent = self._classify_intent(current_question)
             state["reasoning_steps"].append(f"Intent Classification: {intent}")
             
-            # Step 2: Select tool based on intent
-            tool = self._select_tool(intent)
-            state["reasoning_steps"].append(f"Selected Tool: {tool}")
+            # Step 2: Select tools based on intent
+            if intent == "MULTI_TOOL":
+                tools = self._select_multi_tools(current_question)
+                state["reasoning_steps"].append(f"Selected Multi-Tools: {tools}")
+                state["selected_tools"] = tools  # Store multiple tools
+            else:
+                tool = self._select_tool(intent)
+                state["reasoning_steps"].append(f"Selected Tool: {tool}")
+                state["selected_tools"] = [tool]  # Store as single tool list
             
             # Step 3: Create reasoning prompt
+            tools_text = ", ".join(state["selected_tools"])
             reasoning_prompt = f"""You are an expert FIA Formula 1 regulations analyst. 
 
 Current Question: {current_question}
 Intent: {intent}
-Selected Tool: {tool}
+Selected Tools: {tools_text}
 
 Previous Reasoning Steps:
 {chr(10).join(reasoning_steps) if reasoning_steps else "None"}
@@ -202,7 +261,7 @@ Available Tools:
 - general_rag: General regulation questions
 - out_of_scope_handler: Non-regulation questions
 
-Based on the intent classification, explain why you're using the selected tool and what you expect to accomplish."""
+Based on the intent classification, explain why you're using the selected tool(s) and what you expect to accomplish."""
 
             messages = [
                 SystemMessage(content=reasoning_prompt),
@@ -214,7 +273,7 @@ Based on the intent classification, explain why you're using the selected tool a
             
             # Update state
             state["reasoning_steps"].append(f"Reasoning: {reasoning}")
-            state["reasoning_steps"].append(f"Next Action: {tool}")
+            state["reasoning_steps"].append(f"Next Action: {tools_text}")
             
             return state
             
@@ -224,136 +283,84 @@ Based on the intent classification, explain why you're using the selected tool a
             return state
     
     def _act_node(self, state: AgentState) -> AgentState:
-        """Action node - execute the selected tool with refinement capabilities."""
+        """Action node - execute selected tools with multi-tool orchestration support."""
         try:
             current_question = state.get("current_question", "")
+            selected_tools = state.get("selected_tools", [])
             reasoning_steps = state.get("reasoning_steps", [])
-            previous_result = state.get("tool_result", "")
             
-            # Get the last selected tool from reasoning steps
-            selected_tool = None
-            for step in reversed(reasoning_steps):
-                if step.startswith("Selected Tool:"):
-                    selected_tool = step.replace("Selected Tool:", "").strip()
-                    break
-            
-            if not selected_tool:
-                state["reasoning_steps"].append("Error: No tool selected")
+            if not selected_tools:
+                state["reasoning_steps"].append("Error: No tools selected")
                 return state
             
-            # Check if this is a refinement attempt
-            iteration_count = len([step for step in reasoning_steps if "Tool Result:" in step])
-            is_refinement = iteration_count > 0
+            # Initialize multi-tool results
+            if "multi_tool_results" not in state:
+                state["multi_tool_results"] = {}
             
-            if is_refinement:
-                # Decide whether to refine query or switch tools
-                strategy_prompt = f"""The previous attempt didn't provide a complete answer. 
-
-Original Question: {current_question}
-Previous Result: {previous_result[:300]}...
-Current Tool: {selected_tool}
-
-Decide the best strategy:
-1. REFINE_QUERY: Try the same tool with a better query
-2. SWITCH_TOOL: Try a different tool that might work better
-
-Available tools:
-- regulation_search: General search
-- regulation_summary: Comprehensive analysis  
-- general_rag: General questions
-- regulation_comparison: Compare regulations
-- penalty_lookup: Look up penalties
-
-Return only: REFINE_QUERY or SWITCH_TOOL:tool_name"""
-
-                messages = [
-                    SystemMessage(content=strategy_prompt),
-                    HumanMessage(content=current_question)
-                ]
-                
-                response = self.llm.invoke(messages)
-                strategy = response.content.strip()
-                state["reasoning_steps"].append(f"Refinement Strategy: {strategy}")
-                
-                if strategy.startswith("SWITCH_TOOL:"):
-                    # Switch to a different tool
-                    new_tool = strategy.replace("SWITCH_TOOL:", "").strip()
-                    state["reasoning_steps"].append(f"Switching to tool: {new_tool}")
-                    selected_tool = new_tool
-                    query_to_use = current_question
-                else:
-                    # Refine the query for the same tool
-                    refinement_prompt = f"""Create a more specific, refined query that will get better results. 
+            # Execute each selected tool
+            for tool_name in selected_tools:
+                if tool_name in state["multi_tool_results"]:
+                    # Skip if already executed
+                    continue
                     
-Original Question: {current_question}
-Previous Result: {previous_result[:300]}...
-
-Focus on:
-1. More specific keywords
-2. Different search terms  
-3. Alternative phrasings
-4. Additional context
-
-Return only the refined query:"""
-
-                    messages = [
-                        SystemMessage(content=refinement_prompt),
-                        HumanMessage(content=current_question)
-                    ]
-                    
-                    response = self.llm.invoke(messages)
-                    refined_query = response.content.strip()
-                    state["reasoning_steps"].append(f"Refinement Query: {refined_query}")
-                    query_to_use = refined_query
-            else:
-                query_to_use = current_question
-            
-            # Find and execute the tool with proper parameters
-            tool_result = None
-            for tool in self.tools:
-                if tool.name == selected_tool:
-                    try:
-                        # Parse question and extract parameters based on tool type
-                        if selected_tool == "regulation_comparison":
-                            # Extract article number and years from question
-                            import re
-                            article_match = re.search(r'Article (\d+(?:\.\d+)?)', query_to_use, re.IGNORECASE)
-                            year_matches = re.findall(r'(20\d{2})', query_to_use)
+                state["reasoning_steps"].append(f"Executing tool: {tool_name}")
+                
+                # Find and execute the tool
+                tool_result = None
+                for tool in self.tools:
+                    if tool.name == tool_name:
+                        try:
+                            # Parse question and extract parameters based on tool type
+                            if tool_name == "regulation_comparison":
+                                # Extract article number and years from question
+                                import re
+                                article_match = re.search(r'Article (\d+(?:\.\d+)?)', current_question, re.IGNORECASE)
+                                year_matches = re.findall(r'(20\d{2})', current_question)
+                                
+                                if article_match and len(year_matches) >= 2:
+                                    article_number = article_match.group(1)
+                                    year1, year2 = year_matches[0], year_matches[1]
+                                    tool_result = tool._run(article_number=article_number, year1=year1, year2=year2)
+                                else:
+                                    tool_result = f"Could not parse article number and years from: {current_question}"
                             
-                            if article_match and len(year_matches) >= 2:
-                                article_number = article_match.group(1)
-                                year1, year2 = year_matches[0], year_matches[1]
-                                tool_result = tool._run(article_number=article_number, year1=year1, year2=year2)
+                            elif tool_name == "penalty_lookup":
+                                # Extract violation type from question
+                                violation_type = "track limits"  # default
+                                if "MGU-K" in current_question:
+                                    violation_type = "MGU-K"
+                                elif "fuel" in current_question.lower():
+                                    violation_type = "fuel flow"
+                                elif "track" in current_question.lower():
+                                    violation_type = "track limits"
+                                
+                                tool_result = tool._run(violation_type=violation_type)
+                            
                             else:
-                                tool_result = f"Could not parse article number and years from: {query_to_use}"
-                        
-                        elif selected_tool == "penalty_lookup":
-                            # Extract violation type from question
-                            violation_type = "track limits"  # default
-                            if "MGU-K" in query_to_use:
-                                violation_type = "MGU-K"
-                            elif "fuel" in query_to_use.lower():
-                                violation_type = "fuel flow"
-                            elif "track" in query_to_use.lower():
-                                violation_type = "track limits"
+                                # For other tools, use the question directly
+                                tool_result = tool._run(query=current_question)
                             
-                            tool_result = tool._run(violation_type=violation_type)
-                        
-                        else:
-                            # For other tools, use the refined query
-                            tool_result = tool._run(query=query_to_use)
-                        
-                        state["tools_used"].append(selected_tool)
-                        state["reasoning_steps"].append(f"Tool {selected_tool} executed successfully")
-                        break
-                    except Exception as e:
-                        state["reasoning_steps"].append(f"Error executing {selected_tool}: {str(e)}")
-                        return state
+                            # Store result
+                            state["multi_tool_results"][tool_name] = tool_result
+                            state["tools_used"].append(tool_name)
+                            state["reasoning_steps"].append(f"Tool {tool_name} executed successfully")
+                            break
+                            
+                        except Exception as e:
+                            error_msg = f"Error executing {tool_name}: {str(e)}"
+                            state["reasoning_steps"].append(error_msg)
+                            state["multi_tool_results"][tool_name] = error_msg
+                            continue
             
-            if tool_result:
-                state["reasoning_steps"].append(f"Tool Result: {tool_result[:200]}...")
-                # Store the tool result for reflection
-                state["tool_result"] = tool_result
+            # Combine results if multiple tools were used
+            if len(selected_tools) > 1:
+                combined_result = self._combine_multi_tool_results(state["multi_tool_results"], current_question)
+                state["tool_result"] = combined_result
+                state["reasoning_steps"].append(f"Combined results from {len(selected_tools)} tools")
+            else:
+                # Single tool result
+                tool_name = selected_tools[0]
+                state["tool_result"] = state["multi_tool_results"].get(tool_name, "No result")
             
             return state
             
@@ -361,6 +368,47 @@ Return only the refined query:"""
             logger.error(f"Error in act node: {str(e)}")
             state["reasoning_steps"].append(f"Error in action: {str(e)}")
             return state
+    
+    def _combine_multi_tool_results(self, results: Dict[str, str], question: str) -> str:
+        """Combine results from multiple tools into a comprehensive answer."""
+        try:
+            if not results:
+                return "No results from tools"
+            
+            # Create a prompt to combine results
+            results_text = "\n\n".join([f"**{tool_name}**:\n{result}" for tool_name, result in results.items()])
+            
+            combination_prompt = f"""You are an expert FIA Formula 1 regulations analyst. Combine the following results from multiple tools into a comprehensive, well-structured answer.
+
+Original Question: {question}
+
+Tool Results:
+{results_text}
+
+Instructions:
+1. Synthesize the information from all tools
+2. Create a coherent, comprehensive answer
+3. Organize the information logically
+4. Highlight key points and relationships
+5. Ensure the answer directly addresses the original question
+6. Use clear headings and structure
+
+Provide a well-organized, comprehensive answer that combines all the information effectively."""
+
+            messages = [
+                SystemMessage(content=combination_prompt),
+                HumanMessage(content=question)
+            ]
+            
+            response = self.llm.invoke(messages)
+            combined_result = response.content
+            
+            return combined_result
+            
+        except Exception as e:
+            logger.error(f"Error combining multi-tool results: {str(e)}")
+            # Fallback: just concatenate results
+            return "\n\n".join([f"**{tool_name}**:\n{result}" for tool_name, result in results.items()])
     
     def _reflect_node(self, state: AgentState) -> AgentState:
         """Reflection node - evaluate results and decide next steps."""
@@ -495,9 +543,12 @@ Do not provide explanations, scores, or detailed analysis."""
                 current_question=question,
                 reasoning_steps=[],
                 tools_used=[],
+                selected_tools=[],
                 final_answer=None,
                 sources=[],
-                session_id=session_id or f"session_{datetime.now().isoformat()}"
+                session_id=session_id or f"session_{datetime.now().isoformat()}",
+                tool_result=None,
+                multi_tool_results={}
             )
             
             # Run the agent graph
