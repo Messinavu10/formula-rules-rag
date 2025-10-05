@@ -1,0 +1,9 @@
+{
+  "status": "completed",
+  "total_files": 14,
+  "successful_files": 14,
+  "failed_files": 0,
+  "total_chunks": 6842,
+  "output_directory": "/Users/naveenkumar/Desktop/formula-rules-rag/processed_data",
+  "processing_timestamp": "2025-10-05T09:03:33.299751"
+}

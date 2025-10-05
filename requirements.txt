@@ -1,0 +1,33 @@
+# Core RAG and LLM dependencies
+langchain
+langchain-community 
+langchain-openai 
+langchain-pinecone
+langgraph
+langsmith
+openai
+python-dotenv
+
+# Agent and tool dependencies
+langchain-experimental
+
+# API dependencies
+fastapi 
+uvicorn[standard]
+pydantic
+
+# Evaluation
+ragas
+datasets
+pandas
+numpy
+scikit-learn 
+
+# Document processing
+unstructured
+pdfminer.six
+PyMuPDF
+
+# Utilities
+tqdm
+coloredlogs
