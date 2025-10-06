@@ -11,13 +11,8 @@ from typing import Any, Dict, List
 
 from datasets import Dataset
 from ragas import evaluate
-from ragas.metrics import (
-    ContextRelevance,
-    answer_relevancy,
-    context_precision,
-    context_recall,
-    faithfulness,
-)
+from ragas.metrics import (ContextRelevance, answer_relevancy,
+                           context_precision, context_recall, faithfulness)
 
 from evaluation.dataset import FIAEvaluationDataset
 from rag.agent import FIAAgent
