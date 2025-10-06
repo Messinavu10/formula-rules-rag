@@ -22,6 +22,7 @@ from typing import Any, Dict, List, Optional
 
 import fitz  # PyMuPDF
 from langchain.schema import Document
+
 # LangChain imports
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from tqdm import tqdm
