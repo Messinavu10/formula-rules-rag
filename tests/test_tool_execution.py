@@ -26,9 +26,10 @@ class TestToolExecution:
         sample_agent_state["selected_tools"] = ["regulation_search", "penalty_lookup"]
 
         # Mock multiple tools by patching their _run methods
-        with patch.object(fia_agent.tools[0], "_run") as mock_tool1, patch.object(
-            fia_agent.tools[1], "_run"
-        ) as mock_tool2:
+        with (
+            patch.object(fia_agent.tools[0], "_run") as mock_tool1,
+            patch.object(fia_agent.tools[1], "_run") as mock_tool2,
+        ):
             mock_tool1.return_value = "Safety requirements result"
             mock_tool2.return_value = "Penalty information result"
 
@@ -137,9 +138,12 @@ class TestToolExecution:
         """Test that tool execution continues even if one tool fails."""
         sample_agent_state["selected_tools"] = ["regulation_search", "penalty_lookup"]
 
-        with patch.object(
-            fia_agent.tools[0], "_run", side_effect=Exception("First tool error")
-        ), patch.object(fia_agent.tools[1], "_run", return_value="Second tool result"):
+        with (
+            patch.object(
+                fia_agent.tools[0], "_run", side_effect=Exception("First tool error")
+            ),
+            patch.object(fia_agent.tools[1], "_run", return_value="Second tool result"),
+        ):
 
             result_state = fia_agent._act_node(sample_agent_state)
 

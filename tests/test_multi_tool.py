@@ -41,12 +41,13 @@ class TestMultiToolOrchestration:
 
     def test_reason_node_multi_tool(self, fia_agent, sample_agent_state):
         """Test reasoning node with multi-tool selection."""
-        with patch.object(
-            fia_agent, "_classify_intent", return_value="MULTI_TOOL"
-        ), patch.object(
-            fia_agent,
-            "_select_multi_tools",
-            return_value=["regulation_search", "penalty_lookup"],
+        with (
+            patch.object(fia_agent, "_classify_intent", return_value="MULTI_TOOL"),
+            patch.object(
+                fia_agent,
+                "_select_multi_tools",
+                return_value=["regulation_search", "penalty_lookup"],
+            ),
         ):
 
             result_state = fia_agent._reason_node(sample_agent_state)
@@ -60,9 +61,10 @@ class TestMultiToolOrchestration:
 
     def test_reason_node_single_tool(self, fia_agent, sample_agent_state):
         """Test reasoning node with single tool selection."""
-        with patch.object(
-            fia_agent, "_classify_intent", return_value="SEARCH"
-        ), patch.object(fia_agent, "_select_tool", return_value="regulation_search"):
+        with (
+            patch.object(fia_agent, "_classify_intent", return_value="SEARCH"),
+            patch.object(fia_agent, "_select_tool", return_value="regulation_search"),
+        ):
 
             result_state = fia_agent._reason_node(sample_agent_state)
 
@@ -75,10 +77,13 @@ class TestMultiToolOrchestration:
         sample_agent_state["selected_tools"] = ["regulation_search", "penalty_lookup"]
 
         # Mock the tool execution by patching the tools themselves
-        with patch.object(
-            fia_agent.tools[0], "_run", return_value="Safety requirements result"
-        ), patch.object(
-            fia_agent.tools[1], "_run", return_value="Penalty information result"
+        with (
+            patch.object(
+                fia_agent.tools[0], "_run", return_value="Safety requirements result"
+            ),
+            patch.object(
+                fia_agent.tools[1], "_run", return_value="Penalty information result"
+            ),
         ):
 
             result_state = fia_agent._act_node(sample_agent_state)
@@ -150,17 +155,16 @@ class TestMultiToolOrchestration:
         """Test complete multi-tool workflow."""
         question = "What are the safety requirements and penalties?"
 
-        with patch.object(
-            fia_agent, "_classify_intent", return_value="MULTI_TOOL"
-        ), patch.object(
-            fia_agent,
-            "_select_multi_tools",
-            return_value=["regulation_search", "penalty_lookup"],
-        ), patch.object(
-            fia_agent, "_act_node"
-        ) as mock_act, patch.object(
-            fia_agent, "_reflect_node"
-        ) as mock_reflect:
+        with (
+            patch.object(fia_agent, "_classify_intent", return_value="MULTI_TOOL"),
+            patch.object(
+                fia_agent,
+                "_select_multi_tools",
+                return_value=["regulation_search", "penalty_lookup"],
+            ),
+            patch.object(fia_agent, "_act_node") as mock_act,
+            patch.object(fia_agent, "_reflect_node") as mock_reflect,
+        ):
 
             mock_act.return_value = {
                 "tool_result": "Combined safety and penalty information",
