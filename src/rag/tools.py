@@ -62,6 +62,7 @@ class RegulationSearchTool(BaseTool):
     rag_pipeline: FIARAGPipeline
 
     def __init__(self, rag_pipeline: FIARAGPipeline):
+        """Initialize the regulation search tool."""
         super().__init__(rag_pipeline=rag_pipeline)
 
     def _run(
@@ -108,6 +109,7 @@ class RegulationComparisonTool(BaseTool):
     rag_pipeline: FIARAGPipeline
 
     def __init__(self, rag_pipeline: FIARAGPipeline):
+        """Initialize the regulation comparison tool."""
         super().__init__(rag_pipeline=rag_pipeline)
 
     def _run(
@@ -172,6 +174,7 @@ class PenaltyLookupTool(BaseTool):
     rag_pipeline: FIARAGPipeline
 
     def __init__(self, rag_pipeline: FIARAGPipeline):
+        """Initialize the penalty lookup tool."""
         super().__init__(rag_pipeline=rag_pipeline)
 
     def _run(self, violation_type: str, year: Optional[str] = None) -> str:
@@ -215,6 +218,7 @@ class RegulationSummaryTool(BaseTool):
     rag_pipeline: FIARAGPipeline
 
     def __init__(self, rag_pipeline: FIARAGPipeline):
+        """Initialize the regulation summary tool."""
         super().__init__(rag_pipeline=rag_pipeline)
 
     def _run(
@@ -263,6 +267,7 @@ class GeneralRAGTool(BaseTool):
     rag_pipeline: FIARAGPipeline
 
     def __init__(self, rag_pipeline: FIARAGPipeline):
+        """Initialize the general regulation search tool."""
         super().__init__(rag_pipeline=rag_pipeline)
 
     def _run(
@@ -306,6 +311,7 @@ class OutOfScopeTool(BaseTool):
     args_schema: type = RegulationSearchInput
 
     def __init__(self):
+        """Initialize the out-of-scope handler tool."""
         super().__init__()
 
     def _run(
