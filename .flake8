@@ -6,7 +6,7 @@
 max-line-length = 120
 
 # Ignore specific error codes
-ignore = E402,F541,F841,W291,E501,E303
+ignore = E402,F541,F841,W291,E501,E303,W503
 
 # Exclude certain directories
 exclude = 
