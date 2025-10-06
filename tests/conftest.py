@@ -1,12 +1,12 @@
 """
 Pytest configuration and fixtures for FIA Agent tests.
 """
-import pytest
-import os
+
 import sys
-from unittest.mock import Mock, MagicMock, patch
-from typing import Dict, Any, List
 from pathlib import Path
+from unittest.mock import Mock, patch
+
+import pytest
 
 # Add src to path - more robust approach
 project_root = Path(__file__).parent.parent
@@ -17,24 +17,25 @@ sys.path.insert(0, str(src_path))
 sys.path.insert(0, str(project_root))
 
 # Now import the modules
-from rag.agent import FIAAgent, AgentState
+from rag.agent import AgentState, FIAAgent
 from rag.rag_pipeline import FIARAGPipeline
-from rag.tools import create_fia_tools
+
 
 @pytest.fixture
 def mock_rag_pipeline():
     """Mock RAG pipeline for testing."""
     mock_pipeline = Mock(spec=FIARAGPipeline)
     mock_pipeline.query.return_value = {
-        'answer': 'Test regulation answer',
-        'sources': ['test.pdf'],
-        'citations': ['Test citation'],
-        'retrieved_documents': [
+        "answer": "Test regulation answer",
+        "sources": ["test.pdf"],
+        "citations": ["Test citation"],
+        "retrieved_documents": [
             {"content": "Test regulation content", "metadata": {"source": "test.pdf"}}
         ],
-        'metadata': {'retrieved_docs': 1}
+        "metadata": {"retrieved_docs": 1},
     }
     return mock_pipeline
+
 
 @pytest.fixture
 def mock_llm():
@@ -44,6 +45,7 @@ def mock_llm():
     mock_response.content = "Test response"
     mock_llm.invoke.return_value = mock_response
     return mock_llm
+
 
 @pytest.fixture
 def sample_agent_state():
@@ -58,8 +60,9 @@ def sample_agent_state():
         sources=[],
         session_id="test_session",
         tool_result=None,
-        multi_tool_results={}
+        multi_tool_results={},
     )
+
 
 @pytest.fixture
 def mock_tools():
@@ -73,18 +76,20 @@ def mock_tools():
         tools.append(mock_tool)
     return tools
 
+
 @pytest.fixture
 def fia_agent(mock_rag_pipeline, mock_llm, mock_tools):
     """FIA Agent instance for testing."""
-    with patch('rag.agent.ChatOpenAI', return_value=mock_llm):
+    with patch("rag.agent.ChatOpenAI", return_value=mock_llm):
         agent = FIAAgent(
             rag_pipeline=mock_rag_pipeline,
             model_name="gpt-4o-mini",
-            enable_tracing=False
+            enable_tracing=False,
         )
         # Mock the tools
         agent.tools = mock_tools
         return agent
+
 
 @pytest.fixture
 def test_questions():
@@ -94,5 +99,5 @@ def test_questions():
         "multi_tool": "What are the safety requirements and penalties for violations?",
         "comparison": "Compare Article 5 between 2024 and 2025",
         "penalty": "What are the penalties for track limits violations?",
-        "out_of_scope": "What is the weather today?"
+        "out_of_scope": "What is the weather today?",
     }

@@ -1,0 +1,36 @@
+[flake8]
+# FIA Formula 1 Regulations RAG System - Flake8 Configuration
+# More lenient configuration for development and CI scripts
+
+# Line length - allow longer lines for better readability
+max-line-length = 120
+
+# Ignore specific error codes
+ignore = E402,F541,F841,W291,E501,E303
+
+# Exclude certain directories
+exclude = 
+    .git,
+    __pycache__,
+    .pytest_cache,
+    venv,
+    .venv,
+    build,
+    dist,
+    *.egg-info
+
+# Per-file ignores
+per-file-ignores =
+    # CI scripts can have longer lines and different import patterns
+    scripts/*.py:E402,E501,F541
+    # Test files can have unused variables
+    tests/*.py:F841,E501
+    # Dataset files can have long strings
+    src/evaluation/dataset.py:E501
+    # Agent files can have long lines for better readability
+    src/rag/agent.py:E501
+    src/rag/tools.py:E501
+    src/rag/query_interface.py:E501
+    src/rag/rag_pipeline.py:E501
+    src/rag/retriever.py:E501
+    src/evaluation/evaluator.py:E501

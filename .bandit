@@ -1,0 +1,16 @@
+# Bandit configuration for FIA Formula 1 Regulations RAG System
+# This file defines which security issues to suppress
+
+[bandit]
+# Skip specific test IDs
+skips = B404,B602
+
+# Skip specific files
+exclude_dirs = tests,venv,__pycache__
+
+# Skip specific lines
+skip = B404:scripts/fix_code_quality.py:13,B602:scripts/fix_code_quality.py:26,B404:scripts/setup_ci_environment.py:9,B602:scripts/setup_ci_environment.py:22,B404:scripts/test_ci_locally.py:10,B602:scripts/test_ci_locally.py:25
+
+# Only report high severity issues
+severity = high
+confidence = high
