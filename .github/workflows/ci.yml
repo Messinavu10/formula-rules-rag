@@ -52,7 +52,7 @@ jobs:
       run: flake8 src/ scripts/ tests/
       
     - name: Run bandit (security linting)
-      run: bandit -r src/ scripts/
+      run: bandit -r src/ scripts/ -c .bandit
       
     - name: Run safety (dependency security)
       run: safety check
