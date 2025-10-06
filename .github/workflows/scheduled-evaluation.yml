@@ -90,7 +90,7 @@ jobs:
         
     - name: Comment on latest commit (if evaluation failed)
       if: failure()
-      uses: actions/github-script@v6
+      uses: actions/github-script@v8
       with:
         script: |
           const { data: comments } = await github.rest.repos.listCommitComments({
