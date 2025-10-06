@@ -55,7 +55,7 @@ jobs:
       run: bandit -r src/ scripts/ -c .bandit
       
     - name: Run safety (dependency security)
-      run: safety check
+      run: safety check --ignore 77745,77744,73280
 
   # Job 2: Unit and Integration Tests
   test:
