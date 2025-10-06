@@ -8,6 +8,7 @@ to assess the performance of the FIA regulations agent across all tools.
 import logging
 import pandas as pd
 from typing import Dict, List, Any, Optional
+from datetime import datetime
 from datasets import Dataset
 from ragas import evaluate
 from ragas.metrics import (
@@ -314,10 +315,60 @@ class FIAAgentEvaluator:
         # Convert results to serializable format
         export_data = {}
         for tool_name, result in self.evaluation_results.items():
-            if hasattr(result, 'to_pandas'):
-                export_data[tool_name] = result.to_pandas().to_dict()
-            else:
-                export_data[tool_name] = result
+            try:
+                # Check if result is a dictionary (our custom format)
+                if isinstance(result, dict):
+                    if 'metrics' in result and hasattr(result['metrics'], 'to_pandas'):
+                        # RAGAS EvaluationResult object
+                        df = result['metrics'].to_pandas()
+                        export_data[tool_name] = {
+                            'metrics': df.to_dict('records'),
+                            'summary': {
+                                'total_samples': len(df),
+                                'metrics_computed': list(df.columns) if not df.empty else [],
+                                'dataset_size': result.get('dataset_size', 0),
+                                'metrics_type': result.get('metrics_type', 'unknown')
+                            }
+                        }
+                    else:
+                        # Regular dictionary
+                        export_data[tool_name] = result
+                elif hasattr(result, 'to_pandas'):
+                    # Direct RAGAS EvaluationResult object
+                    df = result.to_pandas()
+                    export_data[tool_name] = {
+                        'metrics': df.to_dict('records'),
+                        'summary': {
+                            'total_samples': len(df),
+                            'metrics_computed': list(df.columns) if not df.empty else []
+                        }
+                    }
+                elif hasattr(result, '__dict__'):
+                    # Try to convert object attributes to dict
+                    export_data[tool_name] = {
+                        'type': str(type(result).__name__),
+                        'data': str(result)
+                    }
+                else:
+                    # Fallback to string representation
+                    export_data[tool_name] = {
+                        'type': str(type(result).__name__),
+                        'data': str(result)
+                    }
+            except Exception as e:
+                logger.warning(f"Could not serialize result for {tool_name}: {e}")
+                export_data[tool_name] = {
+                    'type': str(type(result).__name__),
+                    'error': str(e),
+                    'data': str(result)
+                }
+        
+        # Add metadata
+        export_data['_metadata'] = {
+            'evaluation_timestamp': datetime.now().isoformat(),
+            'tools_evaluated': list(self.evaluation_results.keys()),
+            'total_tools': len(self.evaluation_results)
+        }
         
         # Save to file
         output_path = Path(filename)

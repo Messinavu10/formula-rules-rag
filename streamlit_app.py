@@ -304,16 +304,13 @@ def main():
             key="user_input"
         )
         
-        col1, col2, col3 = st.columns([1, 1, 1])
+        col1, col2 = st.columns([1, 1])
         
         with col1:
             send_button = st.form_submit_button("🚀 Send", type="primary", use_container_width=True)
         
         with col2:
             regenerate_button = st.form_submit_button("🔄 Regenerate", use_container_width=True)
-        
-        with col3:
-            evaluate_button = st.form_submit_button("📊 Evaluate", use_container_width=True)
     
     # Handle regenerate button
     if regenerate_button:
@@ -323,10 +320,6 @@ def main():
                    not st.session_state.chat_history[-1]['is_user']):
                 st.session_state.chat_history.pop()
             st.rerun()
-    
-    # Handle evaluate button
-    if evaluate_button:
-        st.info("💡 Use the evaluation script for comprehensive RAGAS metrics")
     
     # Process user input
     if send_button and user_input:

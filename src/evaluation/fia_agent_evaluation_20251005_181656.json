@@ -1,0 +1,201 @@
+{
+  "regulation_search": {
+    "metrics": [
+      {
+        "user_input": "What are the safety requirements for Formula 1 cars?",
+        "retrieved_contexts": [
+          "Article 12: Car Construction and Survival Cell - The survival cell is the continuous closed structure containing the fuel tank, the cockpit and the parts of the Energy Store. The lower plate of the Energy Store assembly is considered to be part of the Survival cell. Cockpit padding includes non-structural parts placed within the cockpit for the sole purpose of improving driver comfort and safety.",
+          "Article 14: Safety Equipment - All cars must be fitted with a fire extinguishing system which will discharge into the cockpit and into the engine compartment. The fire extinguishing system must be approved according to FIA standards. Cars must also have rear view mirrors, safety harnesses, and rear lights.",
+          "Safety requirements include impact testing following FIA Test Procedure 01/00 and specific load tests for survival cell frontal impact, roll structure testing, and side impact structures."
+        ],
+        "response": "The safety requirements for Formula 1 cars, as outlined in the 2025 Technical Regulations, include several critical components designed to enhance driver safety and improve emergency response during races. Here are the key safety requirements:\n\n1. **High-Speed Camera**: Each Formula 1 car must be equipped with a high-speed camera manufactured by a supplier designated by the FIA (F\u00e9d\u00e9ration Internationale de l'Automobile). This camera must be installed according to specific FIA guidelines (Article 8.10.3). The data collected from these cameras is vital for analyzing accidents and improving safety measures.\n\n2. **In-Ear Accelerometers**: Drivers are required to wear in-ear accelerometers, also sourced from an FIA-designated supplier. These devices monitor the driver's physical condition, particularly during high-stress situations, helping to assess the impact of forces experienced during a race (Article 8.10.4).\n\n3. **Biometric Device**: Each driver must wear a biometric device that aids in rescue operations. This device provides essential health information to medical teams in the event of an accident. An exemption from this requirement can be granted by the FIA under certain circumstances (Article 8.10.5).\n\nThese regulations are crucial for enhancing the safety of drivers during races and ensuring that medical teams can respond quickly and effectively in emergencies. The integration of technology such as high-speed cameras and biometric devices reflects the ongoing commitment to improving safety standards in Formula 1 racing.",
+        "reference": "Formula 1 cars must have specific safety structures including survival cells, roll structures, cockpit padding, safety harnesses, fire extinguishers, and rear view mirrors. These are detailed in Article 12 (Car Construction and Survival Cell) and Article 14 (Safety Equipment) of the FIA Technical Regulations.",
+        "faithfulness": 0.125,
+        "answer_relevancy": 0.8675796604927644,
+        "context_precision": 0.9999999999666667
+      },
+      {
+        "user_input": "What are the engine power limits in Formula 1?",
+        "retrieved_contexts": [
+          "Article C5.14: Engine high rev limits must remain within a band of 750rpm...",
+          "Article C5.15: Starting the engine procedures and constraints...",
+          "Article C5.16: Stall prevention systems and operational limits..."
+        ],
+        "response": "In Formula 1, engine power limits are governed by specific regulations that dictate how power can be managed and delivered during races. According to the 2026 Technical Regulations, the following key points outline the power limits:\n\n1. **Maximum Power Demand Reduction**:\n   - For races where the power limited distance exceeds 3500 meters, the maximum power demand from the driver can be reduced by no more than **50 kW** in any 1-second period.\n   - For all other races, this reduction is limited to **100 kW** in any 1-second period.\n\n2. **Total Power Reduction**:\n   - The total power reduction allowed is capped at **450 kW**. This means that teams must manage their engine output carefully to stay within this limit.\n\n3. **Electrical Power from ERS-K**:\n   - The electrical DC power output from the Energy Recovery System (ERS-K) must remain above **-100 kW**. This ensures that the energy recovery systems contribute positively to the vehicle's performance rather than detracting from it.\n\nThese regulations are designed to ensure that teams can effectively manage engine performance while also promoting efficiency and sustainability in the sport. The limits on power demand and recovery are crucial for strategic planning during races, influencing how teams deploy their engine power throughout the event.",
+        "reference": "Formula 1 engines are limited by rev limits rather than explicit power output. The engine high rev limits must remain within a band of 750rpm as specified in Article C5.14 of the 2026 Technical Regulations. Additional operational constraints are outlined in Articles C5.15 and C5.16.",
+        "faithfulness": 0.46153846153846156,
+        "answer_relevancy": 0.8950547432253074,
+        "context_precision": 0.9999999999
+      },
+      {
+        "user_input": "Find Article 5 about power units",
+        "retrieved_contexts": [
+          "Article 5.1: Definitions - Power train: The power unit and associated torque transmission systems, up to but not including the drive shafts. Power unit (PU): The internal combustion engine and turbocharger, complete with its ancillaries, any energy recovery system and all actuation systems and PU-Control electronics necessary to make them function at all times.",
+          "Article 5.2: Engine specification - Only 4-stroke engines with reciprocating pistons are permitted. Engine cubic capacity must be 1600cc (+0/-10cc). Fuel mass flow must not exceed 100kg/h. Pressure charging may only be effected by the use of a sole single stage compressor with a single stage turbine.",
+          "Article 5.13: Energy Recovery System (ERS) - The system will be considered shut down when no high voltage can be present on any external or accessible part of the ERS, or across any capacitor belonging to the MGU control units."
+        ],
+        "response": "Article 5 of the 2024 Technical Regulations is titled \"POWER UNIT\" and encompasses a comprehensive set of sections that detail various aspects of power units used in Formula 1. Here\u2019s a breakdown of the key sections included in Article 5:\n\n- **5.1 Definitions**: Provides definitions relevant to power units.\n- **5.2 Engine specification**: Outlines the specifications that engines must adhere to.\n- **5.3 Other means of propulsion and energy recovery**: Discusses alternative propulsion methods and energy recovery systems.\n- **5.4 Power unit dimensions**: Specifies the dimensional requirements for power units.\n- **5.5 Mass and centre of gravity**: Details the mass limits and center of gravity specifications.\n- **5.6 Power unit torque demand**: Covers the torque requirements for power units.\n- **5.7 Power unit control**: Discusses the control systems for managing power units.\n- **5.8 Engine high rev limits**: Sets the maximum RPM limits for engines.\n- **5.9 Exhaust fluids**: Addresses regulations regarding exhaust emissions.\n- **5.10 Variable geometry systems**: Discusses systems that can change geometry for performance.\n- **5.11 Fuel systems**: Outlines the requirements for fuel systems used in power units.\n- **5.12 Ignition systems**: Covers the specifications for ignition systems.\n- **5.13 Energy Recovery System (ERS)**: Details the requirements for energy recovery systems.\n- **5.14 Engine ancillaries**: Discusses additional components related to the engine.\n- **5.15 Engine intake air**: Specifies requirements for air intake systems.\n- **5.16 Materials and Construction \u2013 Definitions**: Provides definitions related to materials and construction.\n- **5.17 Materials and construction \u2013 General**: Outlines general requirements for materials and construction.\n- **5.18 Materials and construction \u2013 Components**: Discusses specific components and their material requirements.\n- **5.19 Materials and construction \u2013 Pressure charging and exhaust systems**: Covers materials for pressure charging and exhaust systems.\n- **5.20 Materials and construction \u2013 Energy recovery, storage systems and electronic systems**: Details materials for energy recovery and electronic systems.\n- **5.21 Starting the engine**: Discusses the procedures and requirements for starting the engine.\n- **5.22 Stall prevention systems**: Covers systems designed to prevent engine stalling.\n\nThis article provides a thorough framework for the regulations governing power units in Formula 1, ensuring that all technical aspects are clearly defined and regulated.",
+        "reference": "Article 5 in the FIA Technical Regulations covers Power Units and includes sections on definitions (5.1), engine specifications (5.2), other means of propulsion and energy recovery (5.3), mass and centre of gravity (5.5), and energy recovery systems (5.13).",
+        "faithfulness": 0.23076923076923078,
+        "answer_relevancy": 0.6117406933172521,
+        "context_precision": 0.9999999999666667
+      }
+    ],
+    "summary": {
+      "total_samples": 3,
+      "metrics_computed": [
+        "user_input",
+        "retrieved_contexts",
+        "response",
+        "reference",
+        "faithfulness",
+        "answer_relevancy",
+        "context_precision"
+      ],
+      "dataset_size": 3,
+      "metrics_type": "search_focused"
+    }
+  },
+  "regulation_comparison": {
+    "metrics": [
+      {
+        "user_input": "Compare Article 5 between 2024 and 2025",
+        "retrieved_contexts": [
+          "2024 Article 5: Power Unit regulations including definitions, engine specs, and ERS requirements...",
+          "2025 Article 5: Updated power unit regulations with potential modifications...",
+          "Comparison shows evolution of power unit regulations between years..."
+        ],
+        "response": "Error processing your question: Recursion limit of 25 reached without hitting a stop condition. You can increase the limit by setting the `recursion_limit` config key.\nFor troubleshooting, visit: https://python.langchain.com/docs/troubleshooting/errors/GRAPH_RECURSION_LIMIT",
+        "reference": "Article 5 in 2024 Technical Regulations covers Power Units with sections on definitions, engine specifications, energy recovery systems, mass requirements, and ERS specifications. The 2025 version may have updates or modifications reflecting technological advancements or regulatory changes.",
+        "faithfulness": 0.0,
+        "answer_relevancy": 0.0,
+        "context_recall": 1.0
+      },
+      {
+        "user_input": "What changed in safety regulations from 2024 to 2025?",
+        "retrieved_contexts": [
+          "2024 Safety Regulations: Article 12 and 14 requirements...",
+          "2025 Safety Regulations: Updated safety standards and requirements...",
+          "Evolution of safety regulations to improve driver protection..."
+        ],
+        "response": "Error processing your question: Recursion limit of 25 reached without hitting a stop condition. You can increase the limit by setting the `recursion_limit` config key.\nFor troubleshooting, visit: https://python.langchain.com/docs/troubleshooting/errors/GRAPH_RECURSION_LIMIT",
+        "reference": "Safety regulations in Formula 1 typically evolve to incorporate new safety technologies and lessons learned. Changes may include updates to survival cell requirements, enhanced safety equipment standards, and improved crash testing procedures.",
+        "faithfulness": 0.0,
+        "answer_relevancy": 0.0,
+        "context_recall": 0.5
+      }
+    ],
+    "summary": {
+      "total_samples": 2,
+      "metrics_computed": [
+        "user_input",
+        "retrieved_contexts",
+        "response",
+        "reference",
+        "faithfulness",
+        "answer_relevancy",
+        "context_recall"
+      ],
+      "dataset_size": 2,
+      "metrics_type": "comparison_focused"
+    }
+  },
+  "penalty_lookup": {
+    "metrics": [
+      {
+        "user_input": "What are the penalties for track limits violations?",
+        "retrieved_contexts": [
+          "Article 4.2: With the exception of a reprimand or fine, when a penalty is applied under the Code or Article 54.3 the stewards may impose penalty points on a driver's Super Licence. If a driver accrues twelve (12) penalty points his licence will be suspended for the following Competition.",
+          "Article 17.3: Appeals may not be made against decision concerning penalties imposed under Articles 54.3a), 54.3b), 54.3c), 54.3d), 54.3e), 54.3f) or 54.3g), including those imposed during the last three (3) laps or after the end of a sprint session or a race.",
+          "Penalty points will remain on a driver's Super Licence for a period of twelve (12) months after which they will be respectively removed on the twelve (12) month anniversary of their imposition."
+        ],
+        "response": "Penalties for track limits violations in Formula 1 can vary based on the session (practice, qualifying, or race) and the severity of the infraction. Here are the key penalties outlined in the regulations:\n\n1. **Fines**: \n   - Drivers may incur fines of \u20ac100 for each km/h over the speed limit, up to a maximum of \u20ac1000. Additional penalties may apply if a driver is found to have gained an advantage by exceeding track limits.\n\n2. **Time Penalties**: \n   - During various sessions, penalties can include:\n     - **5-second penalty**\n     - **10-second penalty**\n     - **20-second penalty**\n     - **30-second penalty**\n   - These time penalties are added to the driver's elapsed time.\n\n3. **Grid Place Penalties**: \n   - Drivers may receive grid place penalties for the next race if they violate track limits.\n\n4. **Disqualification**: \n   - In severe cases, a driver may be disqualified from the results of the session or suspended from the next competition.\n\n5. **Specific Race Penalties**: \n   - During a Time Trial Control System (TTCS), penalties can include:\n     - **Drive-Through Penalty**: The driver must enter the pit lane and drive through without stopping.\n     - **Stop-and-Go Penalty**: The driver must stop in the pit lane for a specified duration before rejoining the race.\n\nThese penalties are designed to maintain competitive integrity and discourage drivers from gaining an unfair advantage by exceeding track limits. The specific penalties applied can depend on the context of the violation and the timing within the race or session.",
+        "reference": "Track limits violations in Formula 1 can result in various penalties including 5-second penalties (Article B1.10.4a), 10-second penalties (Article B1.10.4b), drive-through penalties (Article B1.10.4c), and stop-and-go penalties (Article B1.10.4d). Additional fines may apply for pit lane speeding.",
+        "faithfulness": 0.0,
+        "answer_relevancy": 0.854191338568839,
+        "context_precision": 0.0
+      },
+      {
+        "user_input": "What penalties apply for fuel flow violations?",
+        "retrieved_contexts": [
+          "Article 5.2.3: Fuel mass flow must not exceed 100kg/h. Below 10500rpm the fuel mass flow must not exceed Q (kg/h) = 0.009 N(rpm)+ 5.5. At partial load, the fuel mass flow must not exceed the limit curve defined in the regulations.",
+          "Article 17.3: Appeals may not be made against decision concerning penalties imposed under Articles 54.3a), 54.3b), 54.3c), 54.3d), 54.3e), 54.3f) or 54.3g), including those imposed during the last three (3) laps or after the end of a sprint session or a race.",
+          "Fuel flow violations can result in disqualification, time penalties, or grid position penalties depending on the severity. The specific penalties are outlined in the sporting regulations and can include exclusion from the race results."
+        ],
+        "response": "Penalties for fuel flow violations in Formula 1 are outlined in the 2024 Sporting Regulations, specifically under Article 54, which addresses general penalties for technical infringements. The penalties that can be imposed for exceeding the allowed fuel flow rate include:\n\n1. **Time Penalties**: Additional seconds may be added to the driver's elapsed race time.\n2. **Grid Position Penalties**: The driver may receive a penalty that affects their starting position in the next race.\n3. **Disqualification**: The driver may be disqualified from the race results if found in violation of fuel flow regulations.\n4. **Suspension**: In severe cases, a driver may be suspended from participating in the next competition.\n\nThe specific penalty imposed depends on the severity of the violation, and the stewards have the discretion to determine the appropriate action. Importantly, decisions made by the stewards regarding these penalties are not subject to appeal, reinforcing their authority in enforcing compliance with fuel flow limits.",
+        "reference": "Fuel flow violations in Formula 1 can result in disqualification, time penalties, or grid position penalties depending on the severity. The specific penalties are outlined in the sporting regulations and can include exclusion from the race results.",
+        "faithfulness": 0.5714285714285714,
+        "answer_relevancy": 0.7961824039782123,
+        "context_precision": 0.3333333333
+      }
+    ],
+    "summary": {
+      "total_samples": 2,
+      "metrics_computed": [
+        "user_input",
+        "retrieved_contexts",
+        "response",
+        "reference",
+        "faithfulness",
+        "answer_relevancy",
+        "context_precision"
+      ],
+      "dataset_size": 2,
+      "metrics_type": "search_focused"
+    }
+  },
+  "out_of_scope": {
+    "metrics": [
+      {
+        "user_input": "What is the weather today?",
+        "retrieved_contexts": [
+          "I'm a specialized FIA Formula 1 regulations assistant...",
+          "I can only help with questions about FIA regulations...",
+          "Please ask me about FIA regulations instead..."
+        ],
+        "response": "I'm unable to provide information about the weather. My expertise is focused on FIA Formula 1 regulations, including technical, sporting, financial, and operational aspects. If you have any questions related to Formula 1 regulations, feel free to ask! For example, you could inquire about engine specifications, safety requirements, or race rules.",
+        "reference": "I cannot provide weather information as I am a specialized FIA Formula 1 regulations assistant. I can only help with questions about FIA regulations including technical, sporting, financial, and operational aspects.",
+        "faithfulness": 0.4,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.49999999995
+      },
+      {
+        "user_input": "How do I cook pasta?",
+        "retrieved_contexts": [
+          "I'm a specialized FIA Formula 1 regulations assistant...",
+          "I can only help with questions about FIA regulations...",
+          "Please ask me about FIA regulations instead..."
+        ],
+        "response": "Cooking pasta is a straightforward process. Here\u2019s a step-by-step guide to help you prepare it perfectly:\n\n### Ingredients:\n- Pasta (any type you prefer)\n- Water\n- Salt\n- Optional: Olive oil or butter, sauce of your choice\n\n### Instructions:\n\n1. **Boil Water:**\n   - Fill a large pot with water. Use about 4-6 quarts of water for every pound of pasta.\n   - Add a generous amount of salt (about 1-2 tablespoons) to the water. This enhances the flavor of the pasta.\n   - Bring the water to a rolling boil over high heat.\n\n2. **Add Pasta:**\n   - Once the water is boiling, add the pasta. Stir it gently to prevent it from sticking together.\n   - Check the package instructions for the recommended cooking time.\n\n3. **Cook the Pasta:**\n   - Let the pasta cook uncovered at a rolling boil. Stir occasionally.\n   - Taste the pasta a minute or two before the package time is up to check for doneness. It should be al dente, meaning it should be firm to the bite but not hard.\n\n4. **Drain the Pasta:**\n   - Once cooked, turn off the heat and carefully drain the pasta in a colander. Do not rinse the pasta unless you are making a cold pasta salad, as rinsing removes the starch that helps sauce adhere.\n\n5. **Add Sauce:**\n   - If you\u2019re using a sauce, return the drained pasta to the pot or a pan, add your sauce, and toss to combine. You can also add a splash of pasta water to help the sauce cling better.\n\n6. **Serve:**\n   - Serve the pasta hot, garnished with cheese, herbs, or any additional toppings you like.\n\n### Tips:\n- For added flavor, you can add a splash of olive oil to the boiling water or toss the pasta with olive oil or butter after draining.\n- Experiment with different types of pasta and sauces to find your favorite combinations!\n\nEnjoy your delicious homemade pasta!",
+        "reference": "I cannot provide cooking instructions as I am a specialized FIA Formula 1 regulations assistant. I can only help with questions about FIA regulations including technical, sporting, financial, and operational aspects.",
+        "faithfulness": 0.0,
+        "answer_relevancy": 0.9658002839798661,
+        "context_precision": 0.0
+      }
+    ],
+    "summary": {
+      "total_samples": 2,
+      "metrics_computed": [
+        "user_input",
+        "retrieved_contexts",
+        "response",
+        "reference",
+        "faithfulness",
+        "answer_relevancy",
+        "context_precision"
+      ],
+      "dataset_size": 2,
+      "metrics_type": "search_focused"
+    }
+  },
+  "_metadata": {
+    "evaluation_timestamp": "2025-10-05T18:16:56.589790",
+    "tools_evaluated": [
+      "regulation_search",
+      "regulation_comparison",
+      "penalty_lookup",
+      "out_of_scope"
+    ],
+    "total_tools": 4
+  }
+}

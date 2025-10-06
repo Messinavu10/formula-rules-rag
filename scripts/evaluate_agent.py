@@ -162,12 +162,16 @@ def main():
                     for i, rec in enumerate(recommendations, 1):
                         print(f"  {i}. {rec}")
         
-        # Export results
+        # Export results to src/evaluation folder
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         filename = f"fia_agent_evaluation_{timestamp}.json"
         
-        print(f"\n💾 Exporting results to {filename}...")
-        export_path = evaluator.export_results(filename)
+        # Set the full path for the evaluation results in src/evaluation
+        evaluation_dir = Path(__file__).parent.parent / "src" / "evaluation"
+        evaluation_path = evaluation_dir / filename
+        
+        print(f"\n💾 Exporting results to {evaluation_path}...")
+        export_path = evaluator.export_results(str(evaluation_path))
         print(f"✅ Results exported to: {export_path}")
         
         print(f"\n🎉 Evaluation completed successfully!")
