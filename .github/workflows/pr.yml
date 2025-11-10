@@ -69,7 +69,7 @@ jobs:
         fail_ci_if_error: false
         
     - name: Comment PR with test results
-      uses: actions/github-script@v6
+      uses: actions/github-script@v8
       if: always()
       with:
         script: |
